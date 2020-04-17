@@ -235,9 +235,7 @@ def count_change(amount):
         else:
             return count_partition(n, m // 2) + count_partition(n - m, m)
 
-
     max = 2 ** int(math.log(amount, 2))
-
     return count_partition(amount, max)
 
 
