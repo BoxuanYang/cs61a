@@ -2,8 +2,8 @@
 
 from lab08 import *
 
-# OOP
 
+# OOP
 
 
 class Keyboard:
@@ -48,11 +48,13 @@ class Keyboard:
 
         return str
 
+
 class Button:
     def __init__(self, pos, key):
         self.pos = pos
         self.key = key
         self.pressed = 0
+
 
 # Nonlocal
 def make_advanced_counter_maker():
@@ -109,6 +111,7 @@ def make_advanced_counter_maker():
                 return
 
         return individual_counter
+
     return make_counter
 
 
@@ -143,7 +146,7 @@ def trade(first, second):
     m, n = 1, 1
     while m <= len(first):
         sum_first = sum(first[:m])
-        for i in range(1, len(second)+1):
+        for i in range(1, len(second) + 1):
             sum_second = sum(second[:i])
             if sum_first == sum_second:
                 n = i
@@ -153,11 +156,12 @@ def trade(first, second):
             break
         m += 1
 
-    if m != len(first) + 1: # change this line!
+    if m != len(first) + 1:  # change this line!
         first[:m], second[:n] = second[:n], first[:m]
         return 'Deal!'
     else:
         return 'No deal!'
+
 
 # Recursive objects
 def make_to_string(front, mid, back, empty_repr):
@@ -175,6 +179,7 @@ def make_to_string(front, mid, back, empty_repr):
     >>> jerrys_to_string(Link.empty)
     '()'
     """
+
     def link_to_string(lnk):
         if lnk is Link.empty:
             return empty_repr
@@ -183,6 +188,7 @@ def make_to_string(front, mid, back, empty_repr):
             return front + str(lnk.first) + mid + link_to_string(lnk.rest) + back
 
     return link_to_string
+
 
 def tree_map(fn, t):
     """Maps the function fn over the entries of t and returns the
@@ -213,7 +219,7 @@ def tree_map(fn, t):
 
     else:
         t.label = fn(t.label)
-        return Tree(t.label, [tree_map(fn, branch) for branch in t.branches])#tree_map(fn, t.branches)
+        return Tree(t.label, [tree_map(fn, branch) for branch in t.branches])  # tree_map(fn, t.branches)
 
 
 def long_paths(tree, n):
@@ -245,7 +251,7 @@ def long_paths(tree, n):
     >>> long_paths(whole, 4)
     [Link(0, Link(11, Link(12, Link(13, Link(14)))))]
     """
-    #非常精妙的解法！没有想太明白
+    # 非常精妙的解法！没有想太明白
     paths = []
     if n <= 0 and tree.is_leaf():
         paths.append(Link(tree.label))
@@ -254,6 +260,7 @@ def long_paths(tree, n):
         for path in long_paths(branch, n - 1):  # 只有在long_paths(branch, n - 1)不为空的时候适用
             paths.append(Link(tree.label, path))
     return paths
+
 
 # Orders of Growth
 def zap(n):
@@ -265,16 +272,18 @@ def zap(n):
             i *= 3
     return count
 
+
 def boom(n):
     sum = 0
     a, b = 1, 1
-    while a <= n*n:
-        while b <= n*n:
-            sum += (a*b)
+    while a <= n * n:
+        while b <= n * n:
+            sum += (a * b)
             b += 1
         b = 0
         a += 1
     return sum
+
 
 # Tree class
 class Tree:
@@ -297,13 +306,14 @@ class Tree:
     def __eq__(self, other):
         return type(other) is type(self) and self.label == other.label \
                and self.branches == other.branches
-    
+
     def __str__(self):
         def print_tree(t, indent=0):
             tree_str = '  ' * indent + str(t.label) + "\n"
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
 
     def copy_tree(self):
