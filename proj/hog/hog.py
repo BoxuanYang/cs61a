@@ -5,6 +5,7 @@ from ucb import main, trace, interact
 
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 
+
 ######################
 # Phase 1: Simulator #
 ######################
@@ -33,7 +34,7 @@ def roll_dice(num_rolls, dice=six_sided):
         i += 1
     if num_of_ones > 0:
         return 1
-    
+
     else:
         return sum
     # END PROBLEM 1
@@ -120,34 +121,35 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    
-    while(score0 < goal and score1 < goal):
+
+    while (score0 < goal and score1 < goal):
         num_of_rolls0 = strategy0(score0, score1)
         score0 += take_turn(num_of_rolls0, score1, dice)
-        if(is_swap(score0, score1)):
+        if (is_swap(score0, score1)):
             t = score0
             score0 = score1
             score1 = t
-        d=say(score0, score1)
+        d = say(score0, score1)
 
-        if(need_to_end(score0, score1, goal)):
-           return score0, score1
-        
+        if (need_to_end(score0, score1, goal)):
+            return score0, score1
+
         num_of_rolls1 = strategy1(score1, score0)
         score1 += take_turn(num_of_rolls1, score0, dice)
-        if(is_swap(score0, score1)):
+        if (is_swap(score0, score1)):
             t = score0
             score0 = score1
             score1 = t
         d(score0, score1)
-        if(need_to_end(score1, score0, goal)):
+        if (need_to_end(score1, score0, goal)):
             return score0, score1
-    
 
     return score0, score1
 
+
 def need_to_end(score0, score1, goal):
     return score0 >= goal or score1 >= goal
+
 
 #######################
 # Phase 2: Commentary #
@@ -158,6 +160,7 @@ def say_scores(score0, score1):
     """A commentary function that announces the score for each player."""
     print("Player 0 now has", score0, "and Player 1 now has", score1)
     return say_scores
+
 
 def announce_lead_changes(previous_leader=None):
     """Return a commentary function that announces lead changes.
@@ -172,6 +175,7 @@ def announce_lead_changes(previous_leader=None):
     >>> f5 = f4(15, 13)
     Player 0 takes the lead by 2
     """
+
     def say(score0, score1):
         if score0 > score1:
             leader = 0
@@ -182,7 +186,9 @@ def announce_lead_changes(previous_leader=None):
         if leader != None and leader != previous_leader:
             print('Player', leader, 'takes the lead by', abs(score0 - score1))
         return announce_lead_changes(leader)
+
     return say
+
 
 def both(f, g):
     """Return a commentary function that says what f says, then what g says.
@@ -197,8 +203,10 @@ def both(f, g):
     Player 0 now has 6 and Player 1 now has 18
     Player 1 takes the lead by 12
     """
+
     def say(score0, score1):
         return both(f(score0, score1), g(score0, score1))
+
     return say
 
 
@@ -219,7 +227,7 @@ def announce_highest(who, previous_high=0, previous_score=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    
+
     """def say(score0, score1):
         if who == 0:
             current_score = score0
@@ -238,27 +246,24 @@ def announce_highest(who, previous_high=0, previous_score=0):
 
         else:
             return announce_highest(who, previous_high, current_score)"""
+
     def print_out(who, diff):
         if diff == 1:
-            print("1 point! That's the biggest gain yet for Player",who)
+            print("1 point! That's the biggest gain yet for Player", who)
         else:
-            print(diff, "points! That's the biggest gain yet for Player",who)
+            print(diff, "points! That's the biggest gain yet for Player", who)
 
     def say(score0, score1):
         if who == 0:
             curr_score = score0
         else:
-            curr_score = score1 #assign curr_score the score of "who"
+            curr_score = score1  # assign curr_score the score of "who"
         curr_incr = curr_score - previous_score
-        #calculate the score increase in this turn
+        # calculate the score increase in this turn
         if curr_incr > previous_high:
             print_out(who, curr_incr)
             return announce_highest(who, curr_incr, curr_score)
         return announce_highest(who, previous_high, curr_score)
-
-
-
-
 
     return say
     # END PROBLEM 7
@@ -282,10 +287,11 @@ def always_roll(n):
     >>> strategy(99, 99)
     5
     """
+
     def strategy(score, opponent_score):
         return n
-    return strategy
 
+    return strategy
 
 
 def make_averaged(fn, num_samples=1000):
@@ -299,6 +305,7 @@ def make_averaged(fn, num_samples=1000):
     >>> averaged_dice()
     3.0
     """
+
     # BEGIN PROBLEM 8
     def average(*args):
         i = 0
@@ -307,6 +314,7 @@ def make_averaged(fn, num_samples=1000):
             result += fn(*args)
             i += 1
         return result / num_samples
+
     return average
     # END PROBLEM 8
 
@@ -323,13 +331,13 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     # BEGIN PROBLEM 9
     """MAKE USE OF THESE TWO FUNCTIONS: make_averaged and roll_dice"""
     average = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    #give a list of average values
+    # give a list of average values
     i = 0
     while i < 10:
         average[i] = make_averaged(roll_dice, num_samples)(i + 1, dice)
         i += 1
 
-    #find smallest number in list
+    # find smallest number in list
     i, max_value = 0, average[0]
     while i < 10:
         if average[i] > max_value:
@@ -405,13 +413,13 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
     NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    
+
     gain = free_bacon(opponent_score)
-    #if zero roll causes at least margin
+    # if zero roll causes at least margin
     if gain >= margin:
         return 0
-    
-    #if it causes a beneficail swap
+
+    # if it causes a beneficail swap
     expected_score = score + gain
     if is_swap(expected_score, opponent_score) and opponent_score > expected_score:
         return 0
